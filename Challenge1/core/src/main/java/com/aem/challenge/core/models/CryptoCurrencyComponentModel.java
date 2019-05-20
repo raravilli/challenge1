@@ -16,6 +16,11 @@ import com.aem.challenge.core.result.CurrencyResult;
 import com.aem.challenge.core.service.CryptoCurrencyService;
 
 
+/**
+ * @author prasanth.aravilli
+ * This model is used in component /apps/Challenge1/components/content/crypto-currency
+ *
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CryptoCurrencyComponentModel {
 	

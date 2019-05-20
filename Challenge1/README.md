@@ -1,58 +1,27 @@
-# Sample AEM project template
+# Solution Implementation
 
-This is a project template for AEM-based applications. It is intended as a best-practice set of examples as well as a potential starting point to develop your own functionality.
+Solution of Challenge1 test is provided in AEM through a Sling Model, OSGI service and a front-end component
 
-## Modules
+## Core Implementation - Java
 
-The main parts of the template are:
+The main implementations are:
 
-* core: Java bundle containing all core functionality like OSGi services, listeners or schedulers, as well as component-related Java code such as servlets or request filters.
-* ui.apps: contains the /apps (and /etc) parts of the project, ie JS&CSS clientlibs, components, templates, runmode specific configs as well as Hobbes-tests
-* ui.content: contains sample content using the components from the ui.apps
-* ui.tests: Java bundle containing JUnit tests that are executed server-side. This bundle is not to be deployed onto production.
-* ui.launcher: contains glue code that deploys the ui.tests bundle (and dependent bundles) to the server and triggers the remote JUnit execution
+* CryptoCurrencyService.java : An OSGI service impl which reads the JSON file URL from OSGI configuration. This service mainly exposes two APIs. 
+	1.  getBestResultsList() - reads json, convert them into CurrencyResult.java model (using Jackson-JSON APIs). Then it identifies the best buy and sell 		of each currency and return the results in list. 
+	2.  getBestResultsAsJson() - calls getBestResultsList() API of this service and returns the result in JSON format
+	
+* CryptoCurrencyUtil.java : Util that can be used to call HTTPClient for external URLs, read inputStream from File System etc.
 
-## How to build
+* CryptoCurrencyComponentModel.java : Sling Model class that calls service APIs. This sling model is used in apps component ('/apps/Challenge1/components/content/crypto-currency') to render the best buy and sell table in front-end
 
-To build all the modules run in the project root directory the following command with Maven 3:
+* CryptoCurrencyServlet.java : A sling servlet exposed by servlet path '/bin/crypto/currency'. This returns result in JSON. The result is appended at the end of this documentation.
 
-    mvn clean install
+## Apps Implementation - Sightly
 
-If you have a running AEM instance you can build and package the whole project and deploy into AEM with  
+* crypto-currency : A component is created to render the table in the required format. Using sightly, sling model class is invoked and best buy/sell prices are displayed. 
 
-    mvn clean install -PautoInstallPackage
-    
-Or to deploy it to a publish instance, run
+## Display 
 
-    mvn clean install -PautoInstallPackagePublish
-    
-Or alternatively
+* To see the component working after deployment of this code base, hit the en.html page under content - http://localhost:4502/content/Challenge1/en.html
 
-    mvn clean install -PautoInstallPackage -Daem.port=4503
-
-Or to deploy only the bundle to the author, run
-
-    mvn clean install -PautoInstallBundle
-
-## Testing
-
-There are three levels of testing contained in the project:
-
-* unit test in core: this show-cases classic unit testing of the code contained in the bundle. To test, execute:
-
-    mvn clean test
-
-* server-side integration tests: this allows to run unit-like tests in the AEM-environment, ie on the AEM server. To test, execute:
-
-    mvn clean verify -PintegrationTests
-
-* client-side Hobbes.js tests: JavaScript-based browser-side tests that verify browser-side behavior. To test:
-
-    in the browser, open the page in 'Developer mode', open the left panel and switch to the 'Tests' tab and find the generated 'MyName Tests' and run them.
-
-
-## Maven settings
-
-The project comes with the auto-public repository configured. To setup the repository in your Maven settings, refer to:
-
-    http://helpx.adobe.com/experience-manager/kb/SetUpTheAdobeMavenRepository.html
+## Note : Screenshot of component view in front-end are uploaded to GIT under /DevelopedComp-Screenshots folder for reference

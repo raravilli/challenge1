@@ -2,7 +2,6 @@ package com.aem.challenge.core.service.impl;
 
 import java.io.InputStream;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +23,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * @author prasanth.aravilli
+ * getBestResultsList and getBestResultsAsJson are two APIs
+ * exposed by this service impl
+ *
+ */
 @Designate(ocd = CryptoCurrencyServiceImpl.Config.class)
 @Component(service = CryptoCurrencyService.class, immediate = true)
 public class CryptoCurrencyServiceImpl  implements CryptoCurrencyService {
@@ -59,15 +64,18 @@ public class CryptoCurrencyServiceImpl  implements CryptoCurrencyService {
 	
 	private List<CurrencyResult> readInputFile(){
 		try{
+			/* list that can be used by component model or servlet */
 			bestResultsList = new LinkedList<CurrencyResult>();
 			ObjectMapper mapper = new ObjectMapper();
 			//HttpEntity entity = httpGet(this.fileURL);			
 			InputStream is = CryptoCurrencyUtil.getInputStreamFromURL(this.fileURL);			
 			if(is != null){
+				/* converts the data/json to list of CurrencyResult Model */
 				List<CurrencyResult> results = mapper.readValue(is, new TypeReference<List<CurrencyResult>>(){});
 				for(CurrencyResult result : results){
 					List<Quote> quotes = result.getQuotes();
 					Collections.sort(quotes, CurrencyResult.ensureSortedByTime );
+					/*finds best buy and sell quotes of each Currency and added them to list*/
 					BestQuote bestQuote = findBestSlots(quotes);
 					if(bestQuote.getSell() != null && bestQuote.getBuy() != null){
 						CurrencyResult bestResult = new CurrencyResult();
@@ -83,6 +91,13 @@ public class CryptoCurrencyServiceImpl  implements CryptoCurrencyService {
 		return bestResultsList;
 	}
 	
+	
+	/**
+	 * @param quotes Each currency quote
+	 * @return
+	 * Below algorithm finds the best buy and sell quotes. once identified,
+	 * adds them to BestQuote model
+	 */
 	private BestQuote findBestSlots(List<Quote> quotes){		
 		double diff = Double.MIN_VALUE;
 		BestQuote bestQuote = new BestQuote();
@@ -114,6 +129,10 @@ public class CryptoCurrencyServiceImpl  implements CryptoCurrencyService {
 		return readInputFile();
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.aem.challenge.core.service.CryptoCurrencyService#getBestResultsAsJson()
+	 * returns the best buy and sell quote models in JSON format
+	 */
 	public String getBestResultsAsJson(){
 		ObjectMapper mapper = new ObjectMapper();
 		try {

@@ -18,6 +18,13 @@ import org.slf4j.LoggerFactory;
 import com.aem.challenge.core.service.CryptoCurrencyService;
 
 
+/**
+ * @author prasanth.aravilli
+ * This servlet is used for testing json and if required, 
+ * this can be called by front end through AJAX
+ * @return JSON string
+ *
+ */
 @Component(service=Servlet.class,immediate = true,
         property={
                 "description" + "=Crypto Currency Servlet",
@@ -39,6 +46,7 @@ public class CryptoCurrencyServlet extends SlingSafeMethodsServlet {
 
        try {
     	   	LOG.info(":: Servlet execution started ::");
+    	   	/* writes best buy and sell JSON string from service as response */
     	   	response.getWriter().write(service.getBestResultsAsJson());
 	       	LOG.info(":: Servlet executed successfully ::");
        } catch (Exception e) {

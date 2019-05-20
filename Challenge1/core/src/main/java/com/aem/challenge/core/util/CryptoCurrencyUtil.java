@@ -17,6 +17,10 @@ public class CryptoCurrencyUtil {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(CryptoCurrencyUtil.class);
 	
+	/**
+	 * @param hours
+	 * @return time format changed from 1350 to 13:50PM
+	 */
 	public static String convertTimeFormatToAmPm(String hours){
 		try{
 			int time = Integer.valueOf(hours);
@@ -29,6 +33,11 @@ public class CryptoCurrencyUtil {
 		return "";
 	}
 	
+	/**
+	 * @param url
+	 * @return 
+	 * This API can be used for HTTPClient calls
+	 */
 	private static HttpEntity HTTPGet(String url){
 		try{
 			HttpClientBuilder builder = HttpClientBuilder.create();
@@ -42,6 +51,11 @@ public class CryptoCurrencyUtil {
 		return null;		
 	}
 	
+	/**
+	 * @param url
+	 * @return
+	 * This API used to read file from File System
+	 */
 	public static InputStream getInputStreamFromURL(String url){
 		File file = new File(url);
 		FileInputStream fis = null;
