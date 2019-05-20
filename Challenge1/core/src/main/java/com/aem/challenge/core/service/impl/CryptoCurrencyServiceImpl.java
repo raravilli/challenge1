@@ -41,8 +41,8 @@ public class CryptoCurrencyServiceImpl  implements CryptoCurrencyService {
 	@ObjectClassDefinition(name = "Crypto Currency Configuration Service", description = "Crypto Currency Configuration Service")
 	public static @interface Config {
 
-		@AttributeDefinition(name = "File URL", description = "Input FIle URL", defaultValue = "./data/cryptocurrencies.json")
-		String propertyFileURL() default "./data/cryptocurrencies.json";
+		@AttributeDefinition(name = "File URL", description = "Input FIle URL", defaultValue = "./data/20180507.json")
+		String propertyFileURL() default "./data/20180507.json";
 
 	}
 
